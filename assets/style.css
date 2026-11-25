@@ -224,6 +224,7 @@ html.js .tab:not(.is-active) { display: none; }
 .tile .big.neg { color: var(--neg); }
 .tile .big.amber { color: var(--amber); }
 .tile .big.text { color: var(--text); }
+.tile .big.long { font-size: 20px; }
 
 .tile .cap {
   display: block;
