@@ -10,18 +10,25 @@
 </head>
 <body>
 
-  <header class="page-head">
-    <div class="wrap">
-      <p class="back"><a href="../index.html">← Back to home</a></p>
-      <h1>Kalshi BTC 15-Minute Strategies: the audit that killed my own edge</h1>
-      <p class="lead">I built a paper-trading system for Kalshi's 15-minute bitcoin markets and tested six strategy lanes on archived data. Before trusting the backtest, I checked its settlement labels against Kalshi's own official results. 7.95% of the labels were wrong, and the errors clustered at the strike. With corrected labels, every lane's P&amp;L interval includes zero.</p>
-      <ul class="links">
-        <li><a href="https://github.com/Prydae/kalshi-btc-audit">Repository on GitHub</a></li>
-      </ul>
+  <header class="topbar">
+    <div class="wrap topbar-inner">
+      <a class="brand" href="../index.html"><span class="dot pos" aria-hidden="true"></span>abhinay kadam</a>
+      <div class="topbar-links">
+        <a class="btn" href="../index.html#projects">← All projects</a>
+        <a class="btn" href="https://github.com/Prydae/kalshi-btc-audit">Repo ↗</a>
+      </div>
     </div>
   </header>
 
-  <main class="wrap">
+  <header class="page-head">
+    <div class="wrap">
+      <p class="pills"><span class="pill"><span class="dot muted" aria-hidden="true"></span>AUDITED · RETIRED</span></p>
+      <h1>Kalshi BTC 15-Minute Strategies: the audit that killed my own edge</h1>
+      <p class="lead">I built a paper-trading system for Kalshi's 15-minute bitcoin markets and tested six strategy lanes on archived data. Before trusting the backtest, I checked its settlement labels against Kalshi's own official results. 7.95% of the labels were wrong, and the errors clustered at the strike. With corrected labels, every lane's P&amp;L interval includes zero.</p>
+    </div>
+  </header>
+
+  <main class="wrap case">
 
     <section id="problem" aria-labelledby="problem-heading">
       <h2 id="problem-heading">The problem</h2>
@@ -203,7 +210,7 @@
 
   <footer class="site-footer">
     <div class="wrap">
-      <p><a href="../index.html">← Back to home</a></p>
+      <p><a href="../index.html#projects">← All projects</a></p>
       <p>Abhinay Kadam · Business Analytics &amp; IT @ Rutgers Business School '28</p>
     </div>
   </footer>

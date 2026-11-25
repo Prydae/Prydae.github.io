@@ -5,82 +5,141 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Abhinay Kadam | Quantitative Research and Trading Systems</title>
   <meta name="description" content="Abhinay Kadam, Business Analytics and IT student at Rutgers Business School. Quantitative research and automated trading systems, with case studies on Kalshi gas and bitcoin markets.">
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' fill='%2314284b'/%3E%3C/svg%3E">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' rx='3' fill='%234c8dff'/%3E%3C/svg%3E">
   <link rel="stylesheet" href="assets/style.css">
+  <script>document.documentElement.classList.add("js");</script>
 </head>
 <body>
 
-  <header class="site-header">
-    <div class="wrap">
-      <h1>Abhinay Kadam</h1>
-      <p class="subtitle">Business Analytics &amp; IT @ Rutgers Business School '28 · Quantitative research &amp; automated trading systems</p>
-      <ul class="links">
-        <li><a href="https://www.linkedin.com/in/abhinay-kadam-8b660b32a">LinkedIn</a></li>
-        <li><a href="https://github.com/Prydae">GitHub</a></li>
-        <li><a href="mailto:kadamabhinay5@gmail.com">Email</a></li>
-        <li><a href="resume.pdf">Resume</a></li>
-      </ul>
+  <header class="topbar">
+    <div class="wrap topbar-inner">
+      <a class="brand" href="#profile"><span class="dot pos" aria-hidden="true"></span>abhinay kadam</a>
+
+      <nav class="seg" aria-label="Sections">
+        <a href="#profile" data-tab-link="profile" aria-current="page">Profile</a>
+        <a href="#projects" data-tab-link="projects">Projects</a>
+      </nav>
+
+      <div class="topbar-links">
+        <a class="btn" href="https://www.linkedin.com/in/abhinay-kadam-8b660b32a">LinkedIn</a>
+        <a class="btn" href="https://github.com/Prydae">GitHub</a>
+        <a class="btn" href="mailto:kadamabhinay5@gmail.com">Email</a>
+        <a class="btn" href="resume.pdf">Resume (PDF)</a>
+      </div>
     </div>
   </header>
 
   <main class="wrap">
 
-    <section id="projects" aria-labelledby="projects-heading">
-      <h2 id="projects-heading">Projects</h2>
-      <div class="cards">
+    <!-- TAB 1: PROFILE -->
+    <section id="profile" class="tab is-active" data-tab="profile" aria-label="Profile">
 
-        <article class="card">
-          <img src="assets/img/gas-pnl-cumulative.png" alt="Line chart of cumulative paper profit per contract over 12 evenings, falling from about 47 cents after the first night to a final +16.94 cents, above the +10.10 cent backtest benchmark.">
-          <div class="card-body">
-            <h3><a href="projects/gas.html">Kalshi Gas Market-Maker</a></h3>
-            <p class="summary">Automated resting offers on Kalshi's daily gas-price markets, taken through a pre-registered backtest, a forward paper test and a small live trial.</p>
-            <dl class="stats">
-              <div>
-                <dt>+16.9¢</dt>
-                <dd>per contract after fees, 12-evening forward paper test (3,270 simulated fills)</dd>
-              </div>
-              <div>
-                <dt>72.1%</dt>
-                <dd>of paper fills were profitable</dd>
-              </div>
-              <div>
-                <dt>38 of 85</dt>
-                <dd>strategy ideas killed or failed a pre-registered gate</dd>
-              </div>
-            </dl>
-            <p class="card-links"><a href="projects/gas.html">Case study</a> · <a href="https://github.com/Prydae/kalshi-gas-maker">Repository</a></p>
-          </div>
-        </article>
+      <div class="panel hero">
+        <div class="pills">
+          <span class="pill"><span class="dot pos" aria-hidden="true"></span><span class="pill-text">Open to Summer 2027 internships</span></span>
+          <span class="pill"><span class="dot muted" aria-hidden="true"></span>New Brunswick, NJ</span>
+          <span class="pill"><span class="dot accent" aria-hidden="true"></span>Quant research · Trading systems</span>
+        </div>
+        <h1>Abhinay Kadam</h1>
+        <p class="sub">Business Analytics &amp; IT @ Rutgers Business School '28</p>
+        <p class="about">I am a BAIT student at Rutgers Business School focused on data-driven decision making. I design strategies, experiments and pass/fail rules, and I build them with AI coding tools. I care more about whether a result is real than whether it looks good.</p>
+      </div>
 
-        <article class="card">
-          <img src="assets/img/btc-lane-pnl.png" alt="Bar chart comparing per-lane profit under original and corrected settlement labels. The REV01 lane falls from +33.5 cents to -4.8 cents; every corrected lane's interval includes zero.">
-          <div class="card-body">
-            <h3><a href="projects/btc.html">Kalshi BTC 15-Minute Audit</a></h3>
-            <p class="summary">An audit of my own bitcoin backtest: settlement labels were checked against Kalshi's official results, and the apparent edges did not survive.</p>
-            <dl class="stats">
-              <div>
-                <dt>7.95%</dt>
-                <dd>of settlement labels disagreed with Kalshi's result (84 of 1,056)</dd>
-              </div>
-              <div>
-                <dt>+33.5¢ → −4.8¢</dt>
-                <dd>REV01 cheap-flip lane, original labels versus Kalshi-verified labels</dd>
-              </div>
-              <div>
-                <dt>0 of 6 strategies survived correction</dt>
-                <dd>lanes whose 95% interval stays above zero once Kalshi-verified labels are used</dd>
-              </div>
-            </dl>
-            <p class="card-links"><a href="projects/btc.html">Case study</a> · <a href="https://github.com/Prydae/kalshi-btc-audit">Repository</a></p>
+      <div class="stats">
+        <div class="tile"><span class="big">3.43</span><span class="cap">GPA · High Honors</span></div>
+        <div class="tile"><span class="big">85</span><span class="cap">strategy ideas logged</span></div>
+        <div class="tile"><span class="big">2</span><span class="cap">trading systems taken live</span></div>
+        <div class="tile"><span class="big">100K+</span><span class="cap">YouTube subscribers grown</span></div>
+      </div>
+
+      <div class="cols">
+
+        <div class="panel span-2">
+          <p class="label">Education</p>
+
+          <div class="entry">
+            <h3>Rutgers Business School – New Brunswick</h3>
+            <p class="meta">B.S. Business Analytics &amp; Information Technology · Expected May 2028</p>
           </div>
-        </article>
+
+          <div class="entry">
+            <h3>Middlesex College</h3>
+            <p class="meta">A.S. Business Administration · High Honors · Aug 2026 · GPA 3.43/4.00 · Dean's List</p>
+          </div>
+
+          <div class="entry">
+            <h3>Relevant coursework</h3>
+            <ul class="chips">
+              <li>Business Programming (Python)</li>
+              <li>Operations Analytics (Linear Programming)</li>
+              <li>Financial Management</li>
+              <li>Risk &amp; Financial Management</li>
+              <li>Business Statistics</li>
+              <li>Calculus I</li>
+              <li>Managerial Accounting</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="panel span-2">
+          <p class="label">Experience</p>
+
+          <div class="entry">
+            <h3>Sales Representative, Garden State Agency (Primo Water)</h3>
+            <p class="meta">NJ · Jan 2026 – Apr 2026</p>
+            <p>Sold Primo Water home-delivery programs to Costco members in-store on a commission-only basis.</p>
+          </div>
+
+          <div class="entry">
+            <h3>Cashier &amp; Stock Associate, Metuchen &amp; Piscataway</h3>
+            <p class="meta">NJ · Oct 2024 – Jan 2026</p>
+            <p>Worked up to 48 hours/week across two stores while enrolled full-time. Handled POS transactions and age-restricted sales compliance.</p>
+          </div>
+
+          <div class="entry">
+            <h3>YouTube Content Editor, Kargil Properties</h3>
+            <p class="meta">Pune, India · May 2022 – Jan 2024</p>
+            <p>Edited and managed the company's real estate YouTube channel, growing it from 0 to 100K+ subscribers and earning YouTube's Silver Creator Award.</p>
+          </div>
+        </div>
+
+        <div class="panel">
+          <p class="label">Projects</p>
+          <div id="profile-projects">
+            <noscript><p class="fallback"><a href="projects/gas.html">Kalshi Gas Market-Maker: case study</a><br><a href="projects/btc.html">Kalshi BTC 15-Minute Audit: case study</a></p></noscript>
+          </div>
+        </div>
+
+        <div class="panel">
+          <p class="label">Leadership</p>
+          <div class="entry">
+            <h3>Head of Social Media, Saarthi4All (Non-Profit)</h3>
+            <p class="meta">Pune, India · 2022 – 2024</p>
+            <p>Led campaigns that raised ₹3,00,000 (~$3,500) to fund surgeries for patients unable to pay.</p>
+          </div>
+        </div>
+
+        <div class="panel span-2">
+          <p class="label">Skills</p>
+          <ul class="chips">
+            <li>Python</li>
+            <li>Git/GitHub</li>
+            <li>Linux (VPS deployment)</li>
+            <li>AI-assisted development (Claude Code, Cursor)</li>
+            <li>English</li>
+            <li>Hindi</li>
+          </ul>
+        </div>
 
       </div>
     </section>
 
-    <section id="about" aria-labelledby="about-heading">
-      <h2 id="about-heading">About</h2>
-      <p>I am a BAIT student at Rutgers Business School focused on data-driven decision making. I design strategies, experiments and pass/fail rules, and I build them with AI coding tools. I care more about whether a result is real than whether it looks good.</p>
+    <!-- TAB 2: PROJECTS -->
+    <section id="projects" class="tab" data-tab="projects" aria-label="Projects">
+      <p class="label" style="margin-top:8px">Projects</p>
+      <div id="project-grid" class="proj-grid">
+        <noscript><p class="fallback">Project cards load with JavaScript. Open the case studies directly: <a href="projects/gas.html">Kalshi Gas Market-Maker</a> · <a href="projects/btc.html">Kalshi BTC 15-Minute Audit</a>.</p></noscript>
+      </div>
     </section>
 
   </main>
@@ -91,5 +150,6 @@
     </div>
   </footer>
 
+  <script src="assets/projects.js"></script>
 </body>
 </html>
