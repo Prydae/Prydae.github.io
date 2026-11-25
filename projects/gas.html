@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Kalshi Gas Market-Maker | Abhinay Kadam</title>
+  <meta name="description" content="Case study: an automated Kalshi gas-price market-maker, from pre-registered backtest to forward paper test and a small live trial. +16.94 cents per contract after fees in a 12-evening paper test.">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' fill='%2314284b'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+
+  <header class="page-head">
+    <div class="wrap">
+      <p class="back"><a href="../index.html">← Back to home</a></p>
+      <h1>Kalshi Gas Market-Maker: from hypothesis to live trading</h1>
+      <p class="lead">An automated trading system for Kalshi's daily US gas-price markets. It went through a pre-registered backtest, a forward paper test and a small live trial. Of 85 strategy ideas logged, this is the one gas edge that cleared every gate.</p>
+      <ul class="links">
+        <li><a href="https://github.com/Prydae/kalshi-gas-maker">Repository on GitHub</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <main class="wrap">
+
+    <section id="problem" aria-labelledby="problem-heading">
+      <h2 id="problem-heading">The problem</h2>
+      <p>Kalshi lists a ladder of contracts each day, each asking whether the AAA national gas average will be above a set price tomorrow. Many ideas for trading that ladder look plausible on paper. The question was which, if any, survive a test written before the result is known.</p>
+      <p>The project logged 85 strategy ideas. 38 were killed or failed a pre-registered gate. Most of the failures taught more than the one edge that worked.</p>
+    </section>
+
+    <section id="approach" aria-labelledby="approach-heading">
+      <h2 id="approach-heading">The approach</h2>
+      <p>In the last hours before the 11:59 PM ET close, buyers of YES pay more than those contracts turn out to be worth on average. The system posts resting offers to sell YES at those prices. About 72% of the contracts it sold settled NO, so the offer kept its premium. It never takes the other side's price, and every result is measured after Kalshi's taker fee.</p>
+
+      <h3>Every idea goes through the same gates</h3>
+      <ol>
+        <li><strong>Write the rule first.</strong> Hypothesis, data split, statistics and pass/fail threshold are committed before any result is computed.</li>
+        <li><strong>Backtest on history</strong> the rule was not tuned on.</li>
+        <li><strong>Forward paper test</strong> on live market data, with a stop rule fixed in advance.</li>
+        <li><strong>Go live small.</strong> Money goes in only after a paper pass, at minimum size.</li>
+        <li><strong>A failed gate is a failure.</strong> Thresholds are never moved after a result is known.</li>
+      </ol>
+
+      <h3>Pipeline</h3>
+      <p class="muted">Public Kalshi market data (markets, trades, order books) → backfill and settlement reconstruction → backtest maker simulator → pre-registered rules and gates → forward paper test (records what a resting order would do) → settlement and ledger in cents per contract. A live trial ran alongside the paper test; its code is private.</p>
+    </section>
+
+    <section id="results" aria-labelledby="results-heading">
+      <h2 id="results-heading">Results</h2>
+      <p>All figures are cents per contract after Kalshi's taker fee. The full detail is in the repository's RESULTS.md.</p>
+
+      <div class="table-wrap">
+        <table class="data">
+          <thead>
+            <tr>
+              <th>Stage</th>
+              <th>Sample</th>
+              <th class="num">Result</th>
+              <th class="num">95% interval</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Backtest, pre-registered benchmark</td>
+              <td>14,213 simulated fills, 67 days</td>
+              <td class="num"><strong>+10.10¢</strong></td>
+              <td class="num">[+4.18, +16.07]*</td>
+            </tr>
+            <tr>
+              <td>Forward paper test</td>
+              <td>3,270 simulated fills, 12 evenings</td>
+              <td class="num"><strong>+16.94¢</strong></td>
+              <td class="num">[+4.75, +27.85]</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="muted">* The pre-registered interval was [+4.28, +16.15]. A fresh bootstrap on the stored simulation gives the interval shown here. The paper interval is a date-level bootstrap, resampling whole evenings rather than fills.</p>
+
+      <ul>
+        <li><strong>Paper fills that were profitable:</strong> 72.1%</li>
+        <li><strong>Paper evenings that were positive:</strong> 8 of 12</li>
+        <li><strong>Ideas tested:</strong> 85 logged; 38 killed or failed a pre-registered gate</li>
+      </ul>
+
+      <div class="note">
+        <p><strong>Read with care.</strong> Paper results are simulated against recorded order books, not real execution, so they can overstate live results. Twelve evenings is a small sample, which is why the paper interval is wide. Live results are private and are not claimed here.</p>
+      </div>
+
+      <h3>By hour of fill (Eastern time), paper, 12 evenings</h3>
+      <div class="table-wrap">
+        <table class="data">
+          <thead>
+            <tr>
+              <th>Hour</th>
+              <th class="num">Fills</th>
+              <th class="num">Cents per contract</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>18:00</td><td class="num">301</td><td class="num">+13.04</td></tr>
+            <tr><td>19:00</td><td class="num">337</td><td class="num">+15.01</td></tr>
+            <tr><td>20:00</td><td class="num">450</td><td class="num">+16.75</td></tr>
+            <tr><td>21:00</td><td class="num">507</td><td class="num">+14.81</td></tr>
+            <tr><td>22:00</td><td class="num">706</td><td class="num">+15.28</td></tr>
+            <tr><td>23:00</td><td class="num">969</td><td class="num">+21.25</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="muted">Every hour is positive. The 23:00 hour, nearest the market's close, earns the most.</p>
+
+      <figure>
+        <img src="../assets/img/gas-pnl-cumulative.png" alt="Line chart of cumulative paper profit per contract across 12 registered nights, from September 17 to September 28, 2026, ending at +16.94 cents. A dashed line marks the +10.10 cent registered backtest benchmark.">
+        <figcaption>Cumulative P&amp;L per contract, gas paper test (size 1), 12 registered nights. Dashed line: registered backtest benchmark, +10.10¢. Live results are not plotted.</figcaption>
+      </figure>
+
+      <figure>
+        <img src="../assets/img/gas-ideas-tested.png" alt="Horizontal bar chart of 85 logged ideas by status: 3 trading live, 0 forward paper test, 9 killed under the kill rule, 29 failed a registered gate, 27 untested, 16 dropped by decision, 1 ambiguous.">
+        <figcaption>Ideas tested or considered: 85 rows. 3 trading live, 9 killed under the project's kill rule, 29 failed a registered gate, 27 untested (no usable data or miscalibrated), 16 dropped by decision, 1 needing a decision.</figcaption>
+      </figure>
+    </section>
+
+    <section id="journey" aria-labelledby="journey-heading">
+      <h2 id="journey-heading">Journey</h2>
+      <ol class="timeline">
+        <li><span class="date">Sep 16, 2026</span>Kill rule registered before the first paper quote; paper test starts. <span class="tag">Setup</span></li>
+        <li><span class="date">Sep 17, 2026</span>Survey finds that the evening edge exists on no other daily Kalshi market. <span class="tag">Finding</span></li>
+        <li><span class="date">Sep 22, 2026</span>A model built on wholesale gasoline (RBOB) prices lost to the market's own pricing at every time of day checked. Refuted. <span class="tag">Setback</span></li>
+        <li><span class="date">Sep 24, 2026</span>First live night, at minimum size. <span class="tag">Milestone</span></li>
+        <li><span class="date">Sep 26, 2026</span>A floating-point rounding error had halted live trading on night three. Fixed with exact decimal arithmetic. <span class="tag">Fixed</span></li>
+        <li><span class="date">Sep 27–29, 2026</span>Filter, capital-cap, start-time and state-market studies: nothing passes confirmation. <span class="tag">Setback</span></li>
+        <li><span class="date">Sep 28, 2026</span>Live trading pre-registered to mirror the paper strategy exactly. <span class="tag">Decision</span></li>
+        <li><span class="date">Oct 16, 2026</span>Sister market (diesel) passes its first live gate: +4.19¢ over 323 fills. <span class="tag">Win</span></li>
+        <li><span class="date">Oct 21, 2026</span>Full scan of daily markets: no second gas-like edge exists. <span class="tag">Finding</span></li>
+        <li><span class="date">Oct 26, 2026</span>Research stack retired; project narrowed to gas and diesel. <span class="tag">Decision</span></li>
+        <li><span class="date">Oct 29, 2026</span>Live trading paused. <span class="tag">Decision</span></li>
+      </ol>
+    </section>
+
+    <section id="learned" aria-labelledby="learned-heading">
+      <h2 id="learned-heading">What I learned</h2>
+      <ul>
+        <li><strong>Rank ideas by what they earn at settlement, not by bid-ask spread.</strong> Screening on spread would have thrown away the one edge that worked.</li>
+        <li><strong>An observed trade is not a fill.</strong> The backtest simulates whether a resting order could actually have been filled, which changed several results.</li>
+        <li><strong>Resample by day, not by trade.</strong> Trades on the same day move together; treating them as independent makes results look far more certain than they are.</li>
+        <li><strong>Both halves must agree.</strong> A result that is positive overall but negative in one half of the data is not an edge.</li>
+        <li><strong>Check the plumbing.</strong> A ledger bug silently skipped compressed data files, and a floating-point rounding error halted live trading. Both were caught and fixed, and every headline number was re-checked against raw files.</li>
+      </ul>
+    </section>
+
+    <section id="built" aria-labelledby="built-heading">
+      <h2 id="built-heading">How it was built</h2>
+      <p>I designed the strategy, the experiments and the pass/fail rules, and reviewed every result against the raw data. The code was written with AI coding tools (Claude Code, Cursor).</p>
+      <p>The repository holds research code only, copied from the private project. Live execution code, the dashboard, deployment configuration and live data are private. To check the method, run <code>python scripts/reproduce_headline.py</code>. It applies the same P&amp;L method to five evenings of public sample data. The 12-evening headline needs the complete tape, which is not published.</p>
+      <p><a href="https://github.com/Prydae/kalshi-gas-maker">View the repository on GitHub</a></p>
+    </section>
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <p><a href="../index.html">← Back to home</a></p>
+      <p>Abhinay Kadam · Business Analytics &amp; IT @ Rutgers Business School '28</p>
+    </div>
+  </footer>
+
+</body>
+</html>

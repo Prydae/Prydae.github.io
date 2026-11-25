@@ -1,0 +1,318 @@
+/* Abhinay Kadam portfolio. Plain CSS, system fonts, no animation. */
+
+:root {
+  --accent: #14284b;
+  --text: #1c2330;
+  --muted: #5b6472;
+  --border: #e2e5ea;
+  --soft: #f6f7f9;
+  --bg: #ffffff;
+}
+
+* { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+a { color: var(--accent); }
+a:hover { text-decoration-thickness: 2px; }
+
+img { max-width: 100%; height: auto; }
+
+.wrap {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 0 16px;
+}
+
+/* Header */
+.site-header {
+  border-bottom: 3px solid var(--accent);
+  padding: 48px 0 28px;
+}
+
+.site-header h1 {
+  margin: 0 0 8px;
+  color: var(--accent);
+  font-size: clamp(1.8rem, 5vw, 2.25rem);
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  line-height: 1.2;
+}
+
+.subtitle {
+  margin: 0 0 20px;
+  color: var(--muted);
+  font-size: 1.05rem;
+  max-width: 62ch;
+}
+
+.links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 20px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: 0.95rem;
+}
+
+/* Sections */
+main section {
+  padding: 40px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+main section:last-of-type { border-bottom: none; }
+
+h2 {
+  margin: 0 0 16px;
+  color: var(--accent);
+  font-size: 1.5rem;
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+h3 {
+  margin: 0 0 8px;
+  color: var(--accent);
+  font-size: 1.2rem;
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+h4 {
+  margin: 24px 0 8px;
+  color: var(--accent);
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+p, li { max-width: 70ch; }
+p { margin: 0 0 14px; }
+ul, ol { padding-left: 22px; margin: 0 0 14px; }
+li { margin-bottom: 6px; }
+
+.lead {
+  font-size: 1.1rem;
+  color: var(--text);
+  max-width: 70ch;
+}
+
+.muted { color: var(--muted); }
+
+/* Project cards */
+.cards {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 24px;
+}
+
+@media (min-width: 760px) {
+  .cards { grid-template-columns: 1fr 1fr; }
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  overflow: hidden;
+  background: var(--bg);
+}
+
+.card img {
+  display: block;
+  width: 100%;
+  border-bottom: 1px solid var(--border);
+  background: var(--soft);
+}
+
+.card-body {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  gap: 12px;
+  padding: 20px;
+}
+
+.card-body h3 { margin: 0; }
+.card-body h3 a { text-decoration: none; }
+.card-body h3 a:hover { text-decoration: underline; }
+
+.card-body .summary { margin: 0; color: var(--muted); }
+
+.stats {
+  display: grid;
+  gap: 10px;
+  margin: 4px 0 0;
+  padding: 12px 0 0;
+  border-top: 1px solid var(--border);
+}
+
+.stats div { display: grid; grid-template-columns: 1fr; gap: 0; }
+
+.stats dt {
+  color: var(--accent);
+  font-size: 1.3rem;
+  font-weight: 700;
+  line-height: 1.3;
+  font-variant-numeric: tabular-nums;
+}
+
+.stats dd {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.92rem;
+}
+
+.card-links {
+  margin: auto 0 0;
+  padding-top: 8px;
+  font-size: 0.95rem;
+}
+
+/* Tables */
+.table-wrap {
+  overflow-x: auto;
+  margin: 16px 0 20px;
+  -webkit-overflow-scrolling: touch;
+}
+
+table.data {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.93rem;
+}
+
+table.data th,
+table.data td {
+  padding: 8px 10px;
+  text-align: left;
+  vertical-align: top;
+  border-bottom: 1px solid var(--border);
+}
+
+table.data th {
+  background: var(--soft);
+  color: var(--accent);
+  font-weight: 600;
+}
+
+table.data .num {
+  text-align: right;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Figures and notes */
+figure {
+  margin: 24px 0;
+}
+
+figure img {
+  display: block;
+  width: 100%;
+  border: 1px solid var(--border);
+}
+
+figcaption {
+  margin-top: 8px;
+  color: var(--muted);
+  font-size: 0.9rem;
+  max-width: 70ch;
+}
+
+.note {
+  margin: 16px 0;
+  padding: 12px 16px;
+  border-left: 3px solid var(--accent);
+  background: var(--soft);
+  max-width: 70ch;
+}
+
+.note p:last-child { margin-bottom: 0; }
+
+/* Timeline */
+.timeline {
+  list-style: none;
+  margin: 0;
+  padding: 0 0 0 24px;
+  border-left: 2px solid var(--border);
+  margin-left: 4px;
+}
+
+.timeline li {
+  position: relative;
+  margin: 0 0 18px;
+}
+
+.timeline li::before {
+  content: "";
+  position: absolute;
+  left: -30px;
+  top: 6px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--accent);
+}
+
+.timeline .date {
+  display: block;
+  color: var(--accent);
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.tag {
+  display: inline-block;
+  margin-left: 8px;
+  padding: 0 6px;
+  border: 1px solid var(--accent);
+  border-radius: 3px;
+  color: var(--accent);
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  vertical-align: 1px;
+}
+
+/* Page furniture */
+.back {
+  display: inline-block;
+  margin: 24px 0 0;
+  font-size: 0.95rem;
+}
+
+.page-head {
+  padding: 40px 0 28px;
+  border-bottom: 3px solid var(--accent);
+}
+
+.page-head h1 {
+  margin: 0 0 12px;
+  color: var(--accent);
+  font-size: clamp(1.7rem, 4.5vw, 2.1rem);
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.page-head .lead { margin: 0 0 16px; color: var(--muted); }
+
+.site-footer {
+  padding: 28px 0 40px;
+  border-top: 1px solid var(--border);
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.site-footer p { margin: 0 0 6px; }

@@ -1,0 +1,212 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Kalshi BTC 15-Minute Audit | Abhinay Kadam</title>
+  <meta name="description" content="Case study: an audit of a Kalshi 15-minute bitcoin backtest. 7.95% of settlement labels disagreed with Kalshi's official results, and no strategy lane stayed positive after correction.">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' fill='%2314284b'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+
+  <header class="page-head">
+    <div class="wrap">
+      <p class="back"><a href="../index.html">← Back to home</a></p>
+      <h1>Kalshi BTC 15-Minute Strategies: the audit that killed my own edge</h1>
+      <p class="lead">I built a paper-trading system for Kalshi's 15-minute bitcoin markets and tested six strategy lanes on archived data. Before trusting the backtest, I checked its settlement labels against Kalshi's own official results. 7.95% of the labels were wrong, and the errors clustered at the strike. With corrected labels, every lane's P&amp;L interval includes zero.</p>
+      <ul class="links">
+        <li><a href="https://github.com/Prydae/kalshi-btc-audit">Repository on GitHub</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <main class="wrap">
+
+    <section id="problem" aria-labelledby="problem-heading">
+      <h2 id="problem-heading">The problem</h2>
+      <p>Each 15-minute market asks whether bitcoin will close above a set price, the strike. Kalshi's official result should decide settlement. My early labels did not come from it. They were inferred from the bitcoin spot price on Coinbase, and the two sources sometimes disagree.</p>
+      <p>The wrong labels were most often wrong when the price finished close to the strike, which is exactly where several strategies trade. TB_N enters only within 75 USD of the strike, and REV01 only within 15 USD. A wrong label near the strike tells a strategy it won a bet it lost, or the reverse. That is how a weak strategy can look excellent in a backtest. REV01's win rate went from 46.6% under the original labels to 8.2% under Kalshi's results.</p>
+    </section>
+
+    <section id="approach" aria-labelledby="approach-heading">
+      <h2 id="approach-heading">The approach</h2>
+      <ol>
+        <li><strong>Collect.</strong> Poll public market data (orderbook, trades, market metadata) into a Snapshot and store each day in SQLite. The collector is read-only.</li>
+        <li><strong>Trade on paper.</strong> Six strategy lanes emit signals. The paper engine assumes a full fill at the signal price.</li>
+        <li><strong>Settle two ways.</strong> Score every window with the spot-inferred label and with Kalshi's official result.</li>
+        <li><strong>Audit before trusting.</strong> Check the labels against Kalshi's results first, then compare P&amp;L under both label sets.</li>
+        <li><strong>Measure honestly.</strong> Report cents per contract with 95% bootstrap intervals over trades, after an assumed fee.</li>
+      </ol>
+    </section>
+
+    <section id="results" aria-labelledby="results-heading">
+      <h2 id="results-heading">Results</h2>
+      <p>All P&amp;L is in cents per contract. Intervals are 95% bootstrap intervals over trades. The full method and caveats are in the repository's RESULTS.md.</p>
+
+      <h3>1. Settlement labels disagree with Kalshi on 84 of 1,056 windows</h3>
+      <p>The original rule reproduces <code>btc_final ≥ strike</code> exactly on all 1,056 windows, so the error comes from the price source and not from a coding slip in the rule.</p>
+      <div class="table-wrap">
+        <table class="data">
+          <thead>
+            <tr>
+              <th>Distance from strike</th>
+              <th class="num">Windows</th>
+              <th class="num">Wrong labels</th>
+              <th class="num">Error rate</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>0–5 USD</td><td class="num">37</td><td class="num">15</td><td class="num">40.5%</td></tr>
+            <tr><td>5–10 USD</td><td class="num">45</td><td class="num">16</td><td class="num">35.6%</td></tr>
+            <tr><td>10–25 USD</td><td class="num">124</td><td class="num">31</td><td class="num">25.0%</td></tr>
+            <tr><td>25–50 USD</td><td class="num">185</td><td class="num">13</td><td class="num">7.0%</td></tr>
+            <tr><td>50–100 USD</td><td class="num">268</td><td class="num">5</td><td class="num">1.9%</td></tr>
+            <tr><td>100+ USD</td><td class="num">397</td><td class="num">4</td><td class="num">1.0%</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="muted">Within 10 USD of the strike, 31 of 82 windows (38%) are labelled wrong.</p>
+
+      <figure>
+        <img src="../assets/img/btc-label-error.png" alt="Bar chart of the share of settlement labels that disagree with Kalshi's result, by distance from strike: 40.5% at 0 to 5 USD, 35.6% at 5 to 10 USD, 25.0% at 10 to 25 USD, 7.0% at 25 to 50 USD, 1.9% at 50 to 100 USD, and 1.0% above 100 USD.">
+        <figcaption>Error rate by distance between the BTC price at close and the strike. 1,056 usable windows, closing 23 June to 4 July 2026.</figcaption>
+      </figure>
+
+      <h3>2. Per-lane P&amp;L, original versus corrected labels</h3>
+      <p>The same 1,476 paper entries are scored under both label sets. Entries are identical under both; only the settlement outcome changes.</p>
+      <div class="table-wrap">
+        <table class="data">
+          <thead>
+            <tr>
+              <th>Lane</th>
+              <th class="num">Trades</th>
+              <th>Win rate, original → corrected</th>
+              <th class="num">Mean entry</th>
+              <th class="num">Original [95% CI]</th>
+              <th class="num">Corrected [95% CI]</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>REV01 cheap flip</td><td class="num">73</td><td>46.6% → 8.2%</td><td class="num">13.0¢</td><td class="num">+33.5 [+22.5, +44.8]</td><td class="num">−4.8 [−10.5, +2.1]</td></tr>
+            <tr><td>S01 late-window fade</td><td class="num">390</td><td>36.1% → 25.4%</td><td class="num">26.9¢</td><td class="num">+9.2 [+4.7, +13.7]</td><td class="num">−1.5 [−5.4, +2.5]</td></tr>
+            <tr><td>TB_N stale wide crowded</td><td class="num">221</td><td>82.8% → 76.5%</td><td class="num">75.8¢</td><td class="num">+7.0 [+1.9, +11.8]</td><td class="num">+0.7 [−5.0, +6.2]</td></tr>
+            <tr><td>PR_NO 50–70 book</td><td class="num">291</td><td>66.3% → 63.2%</td><td class="num">60.2¢</td><td class="num">+6.1 [+0.7, +11.5]</td><td class="num">+3.0 [−2.5, +8.7]</td></tr>
+            <tr><td>TB_Q midwide YES-heavy fade</td><td class="num">281</td><td>75.1% → 72.2%</td><td class="num">73.0¢</td><td class="num">+2.1 [−3.2, +7.0]</td><td class="num">−0.8 [−6.0, +4.3]</td></tr>
+            <tr><td>TA_L burst wide fade</td><td class="num">220</td><td>73.6% → 72.3%</td><td class="num">74.5¢</td><td class="num">−0.9 [−6.9, +4.8]</td><td class="num">−2.3 [−8.1, +3.6]</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p><strong>No corrected lane is clearly positive.</strong> Every corrected interval includes zero. The largest corrected estimate, PR_NO at +3.0¢, has an interval from −2.5¢ to +8.7¢. REV01 looked strongest under the original labels and is negative once the labels are corrected.</p>
+
+      <figure>
+        <img src="../assets/img/btc-lane-pnl.png" alt="Grouped bar chart of lane P&amp;L on the same entries under original and corrected labels. Original: TA_L -0.9, TB_Q +2.1, TB_N +7.0, PR_NO +6.1, S01 +9.2, REV01 +33.5. Corrected: TA_L -2.3, TB_Q -0.8, TB_N +0.7, PR_NO +3.0, S01 -1.5, REV01 -4.8.">
+        <figcaption>Lane P&amp;L on the same entries, original (spot-inferred) versus corrected (Kalshi result) labels. Gross, before fees. Bars show 95% bootstrap intervals.</figcaption>
+      </figure>
+
+      <h3>3. After an assumed fee</h3>
+      <p>Fees are a sensitivity check, not a measured cost. The formula comes from secondary sources, and Kalshi's fee schedule for this series was not verified.</p>
+      <div class="table-wrap">
+        <table class="data">
+          <thead>
+            <tr>
+              <th>Lane</th>
+              <th class="num">Gross (¢)</th>
+              <th class="num">Taker fee (¢)</th>
+              <th class="num">Net, taker (¢) [95% CI]</th>
+              <th class="num">Net, maker scenario (¢)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>REV01 (cheap flip)</td><td class="num">−4.8</td><td class="num">0.8</td><td class="num">−5.6 [−11.3, +1.3]</td><td class="num">−5.0</td></tr>
+            <tr><td>PR_NO (mid-window fade)</td><td class="num">+3.0</td><td class="num">1.6</td><td class="num">+1.4 [−4.1, +7.0]</td><td class="num">+2.6</td></tr>
+            <tr><td>TB_N (mid-window fade)</td><td class="num">+0.7</td><td class="num">1.3</td><td class="num">−0.6 [−6.3, +4.9]</td><td class="num">+0.4</td></tr>
+            <tr><td>TB_Q (mid-window fade)</td><td class="num">−0.8</td><td class="num">1.3</td><td class="num">−2.1 [−7.4, +3.0]</td><td class="num">−1.1</td></tr>
+            <tr><td>TA_L (mid-window fade)</td><td class="num">−2.3</td><td class="num">1.3</td><td class="num">−3.6 [−9.4, +2.3]</td><td class="num">−2.6</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>After the assumed fees, no lane is clearly positive. The maker scenario uses 0.0175 × P × (1 − P), also from secondary sources.</p>
+
+      <h3>4. Paper versus live</h3>
+      <p>Live-traded signals, 11–22 June 2026, de-duplicated by window. The paper figure assumes a full fill at the signal price. The live figure counts unfilled signals as zero.</p>
+      <div class="table-wrap">
+        <table class="data">
+          <thead>
+            <tr>
+              <th>Measure</th>
+              <th class="num">PR_NO 50–70 book</th>
+              <th class="num">TB_N stale wide</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>Signals</td><td class="num">304</td><td class="num">202</td></tr>
+            <tr><td>Filled</td><td class="num">150 (49%)</td><td class="num">110 (54%)</td></tr>
+            <tr><td>Paper, cents per signal [CI]</td><td class="num">+5.9 [+0.6, +10.8]</td><td class="num">+4.9 [−0.8, +10.2]</td></tr>
+            <tr><td>Live, cents per signal, unfilled = 0 [CI]</td><td class="num">+0.5 [−3.4, +4.4]</td><td class="num">+1.7 [−2.9, +5.8]</td></tr>
+            <tr><td>Mean fill price minus signal price</td><td class="num">+0.02¢</td><td class="num">+0.36¢</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>153 of 506 live signals (30%) were cancelled after an API error, and 93 more timed out without filling. Price slippage was small. The paper-to-live gap comes mainly from missed fills.</p>
+      <p class="muted">Adverse selection is a hint, not a conclusion. Signals that filled won less often than signals that did not: PR_NO 58.7% filled versus 71.4% unfilled, and TB_N 78.2% versus 83.7%. The samples are small, and these windows have only the original labels.</p>
+
+      <figure>
+        <img src="../assets/img/btc-paper-vs-live.png" alt="Bar chart comparing paper and live cents per signal on live-traded signals from 11 to 22 June 2026. PR_NO: paper +5.9, live +0.5. TB_N: paper +4.9, live +1.7. Error bars show 95% intervals.">
+        <figcaption>Paper versus live on live-traded signals, 11–22 June 2026. Labels are spot-inferred, because no Kalshi result exists for these windows.</figcaption>
+      </figure>
+
+      <div class="note">
+        <p><strong>Caveats.</strong></p>
+        <ul>
+          <li><strong>The corrected labels are stored values.</strong> They came from Kalshi's result field when the archive was relabelled. The public endpoint now returns HTTP 404 for tickers from that period, so the stored values are the only record.</li>
+          <li><strong>Live windows have no Kalshi-verified results.</strong> Section 4 uses the original labels.</li>
+          <li><strong>The fee formula is from secondary sources.</strong> Section 3 is a sensitivity range, not a measured cost.</li>
+          <li><strong>Intervals are per trade.</strong> Trades on the same window can be correlated across lanes, so the intervals are somewhat optimistic.</li>
+          <li><strong>Paper fills are an upper bound.</strong> The paper engine fills every entry in full at the signal price. Section 4 shows what that assumption costs.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section id="journey" aria-labelledby="journey-heading">
+      <h2 id="journey-heading">Journey</h2>
+      <ol class="timeline">
+        <li><span class="date">Mar 25, 2026</span>First archived 15-minute window. <span class="tag">Setup</span></li>
+        <li><span class="date">Jun 11, 2026</span>First live fill logged (PR_NO). <span class="tag">Milestone</span></li>
+        <li><span class="date">Jun 11–22, 2026</span>Live trading period: 506 signals across two lanes. About 30% were lost to API cancellations. <span class="tag">Setback</span></li>
+        <li><span class="date">Jun 22, 2026</span>Kalshi results fetched for windows closing from this date onward. <span class="tag">Fix</span></li>
+        <li><span class="date">Jun 23 – Jul 4, 2026</span>Twelve archived days relabelled from Kalshi's results, and the labels audited. The audit found 7.95% of labels wrong. <span class="tag">Finding</span></li>
+        <li><span class="date">Late Aug 2026</span>Research code consolidated into the current package. <span class="tag">Milestone</span></li>
+        <li><span class="date">Aug 30, 2026</span>Last collected day in the archive. <span class="tag">Milestone</span></li>
+      </ol>
+    </section>
+
+    <section id="learned" aria-labelledby="learned-heading">
+      <h2 id="learned-heading">What I learned</h2>
+      <ul>
+        <li><strong>Check your labels against the venue's own settlement before any backtest.</strong> A plausible-looking edge can be a labelling artifact. Here it was.</li>
+        <li><strong>Look at the interval, not the headline.</strong> All six lanes have fewer than 400 trades, and every corrected interval is wide enough to include zero.</li>
+        <li><strong>An observed price is not a fill.</strong> Paper assumed every entry filled. Live filled about half, and the signals that did fill won less often (a hint, not proof).</li>
+        <li><strong>Keep the evidence.</strong> The Kalshi results that corrected the labels can no longer be re-fetched from the public endpoint, so the archive has to be preserved.</li>
+      </ul>
+    </section>
+
+    <section id="built" aria-labelledby="built-heading">
+      <h2 id="built-heading">How it was built</h2>
+      <p>I designed the strategies, the checks and the review of every result against the raw data. The code was written with AI coding tools (Claude Code).</p>
+      <p>The repository holds the strategy, audit and P&amp;L code: the models, collector, store, paper engine, labels, six strategy lanes and a replay tool. Omitted: live order execution, signed API requests, credentials, deployment scripts, the dashboard, live collector data and the earlier research history.</p>
+      <p>To check the method, run <code>python scripts/reproduce.py</code>. It repeats the label and P&amp;L checks on a three-day public sample. The sample is not the headline dataset: on it, the mismatch rate is 5.8% rather than 7.95%, so use the RESULTS.md tables for the figures.</p>
+      <p><a href="https://github.com/Prydae/kalshi-btc-audit">View the repository on GitHub</a></p>
+    </section>
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <p><a href="../index.html">← Back to home</a></p>
+      <p>Abhinay Kadam · Business Analytics &amp; IT @ Rutgers Business School '28</p>
+    </div>
+  </footer>
+
+</body>
+</html>

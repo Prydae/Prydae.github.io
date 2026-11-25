@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Abhinay Kadam | Quantitative Research and Trading Systems</title>
+  <meta name="description" content="Abhinay Kadam, Business Analytics and IT student at Rutgers Business School. Quantitative research and automated trading systems, with case studies on Kalshi gas and bitcoin markets.">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' fill='%2314284b'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="wrap">
+      <h1>Abhinay Kadam</h1>
+      <p class="subtitle">Business Analytics &amp; IT @ Rutgers Business School '28 · Quantitative research &amp; automated trading systems</p>
+      <ul class="links">
+        <li><a href="https://www.linkedin.com/in/abhinay-kadam-8b660b32a">LinkedIn</a></li>
+        <li><a href="https://github.com/Prydae">GitHub</a></li>
+        <li><a href="mailto:kadamabhinay5@gmail.com">Email</a></li>
+        <li><a href="resume.pdf">Resume</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <main class="wrap">
+
+    <section id="projects" aria-labelledby="projects-heading">
+      <h2 id="projects-heading">Projects</h2>
+      <div class="cards">
+
+        <article class="card">
+          <img src="assets/img/gas-pnl-cumulative.png" alt="Line chart of cumulative paper profit per contract over 12 evenings, falling from about 47 cents after the first night to a final +16.94 cents, above the +10.10 cent backtest benchmark.">
+          <div class="card-body">
+            <h3><a href="projects/gas.html">Kalshi Gas Market-Maker</a></h3>
+            <p class="summary">Automated resting offers on Kalshi's daily gas-price markets, taken through a pre-registered backtest, a forward paper test and a small live trial.</p>
+            <dl class="stats">
+              <div>
+                <dt>+16.9¢</dt>
+                <dd>per contract after fees, 12-evening forward paper test (3,270 simulated fills)</dd>
+              </div>
+              <div>
+                <dt>72.1%</dt>
+                <dd>of paper fills were profitable</dd>
+              </div>
+              <div>
+                <dt>38 of 85</dt>
+                <dd>strategy ideas killed or failed a pre-registered gate</dd>
+              </div>
+            </dl>
+            <p class="card-links"><a href="projects/gas.html">Case study</a> · <a href="https://github.com/Prydae/kalshi-gas-maker">Repository</a></p>
+          </div>
+        </article>
+
+        <article class="card">
+          <img src="assets/img/btc-lane-pnl.png" alt="Bar chart comparing per-lane profit under original and corrected settlement labels. The REV01 lane falls from +33.5 cents to -4.8 cents; every corrected lane's interval includes zero.">
+          <div class="card-body">
+            <h3><a href="projects/btc.html">Kalshi BTC 15-Minute Audit</a></h3>
+            <p class="summary">An audit of my own bitcoin backtest: settlement labels were checked against Kalshi's official results, and the apparent edges did not survive.</p>
+            <dl class="stats">
+              <div>
+                <dt>7.95%</dt>
+                <dd>of settlement labels disagreed with Kalshi's result (84 of 1,056)</dd>
+              </div>
+              <div>
+                <dt>+33.5¢ → −4.8¢</dt>
+                <dd>REV01 cheap-flip lane, original labels versus Kalshi-verified labels</dd>
+              </div>
+              <div>
+                <dt>+3.0¢</dt>
+                <dd>best corrected estimate (PR_NO), 95% interval −2.5¢ to +8.7¢</dd>
+              </div>
+            </dl>
+            <p class="card-links"><a href="projects/btc.html">Case study</a> · <a href="https://github.com/Prydae/kalshi-btc-audit">Repository</a></p>
+          </div>
+        </article>
+
+      </div>
+    </section>
+
+    <section id="about" aria-labelledby="about-heading">
+      <h2 id="about-heading">About</h2>
+      <p>I am a BAIT student at Rutgers Business School focused on data-driven decision making. I design strategies, experiments and pass/fail rules, and I build them with AI coding tools. I care more about whether a result is real than whether it looks good.</p>
+    </section>
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <p>Abhinay Kadam · Business Analytics &amp; IT @ Rutgers Business School '28</p>
+    </div>
+  </footer>
+
+</body>
+</html>
